@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: your_fio
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: Пешехонов
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  python:
+    image: python:3.9
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    depends_on:
+      - db
+    command: python app.py
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
